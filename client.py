@@ -1,31 +1,13 @@
 import socket
 import os
 from datetime import datetime
+from PyQt5.QtCore import QThread
 
-def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, length = 100, fill = '█', printEnd = "\r"):
-    """
-    Call in a loop to create terminal progress bar
-    @params:
-        iteration   - Required  : current iteration (Int)
-        total       - Required  : total iterations (Int)
-        prefix      - Optional  : prefix string (Str)
-        suffix      - Optional  : suffix string (Str)
-        decimals    - Optional  : positive number of decimals in percent complete (Int)
-        length      - Optional  : character length of bar (Int)
-        fill        - Optional  : bar fill character (Str)
-        printEnd    - Optional  : end character (e.g. "\r", "\r\n") (Str)
-    """
-    percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
-    filledLength = int(length * iteration // total)
-    bar = fill * filledLength + '-' * (length - filledLength)
-    print(f'\r{prefix} |{bar}| {percent}% {suffix}', end = printEnd)
-    # Print New Line on Complete
-    if iteration == total: 
-        print()
 
-class Client:
+class Client(QThread):
 
     def __init__(self, files, ip_address, port):
+        super(Client, self).__init__()
         self.files = files
         self.ip_address = ip_address
         self.port = port
@@ -39,7 +21,7 @@ class Client:
         str(totalSize) + " Bytes in " + str(seconds) + " seconds")
 
 
-    def sendFiles(self):
+    def run(self):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.connect((self.ip_address, self.port))
 
