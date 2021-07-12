@@ -31,6 +31,17 @@ class Ui_MainWindow(QtWidgets.QMainWindow):
         self.server.start()
     
 
+if "prefs.json" not in os.listdir(sys.path[0]):
+    prefs = {
+        "port": 1234,
+        "ip_addresses": [],
+        "destination": sys.path[0]
+    }
+    out_file = open(os.path.join(sys.path[0], "prefs.json"), "w")
+    json.dump(prefs, out_file)
+else:
+    prefs = json.load(open(os.path.join(sys.path[0], "prefs.json"), "r"))
+
 app = QtWidgets.QApplication(sys.argv) # Create an instance of QtWidgets.QApplication
 window = Ui_MainWindow() # Create an instance of our class
 app.exec_() # Start the application
